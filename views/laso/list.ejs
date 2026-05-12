@@ -1,0 +1,59 @@
+<% const title='Lá số đã tạo'; const active='laso' %>
+<%- include('../partials/header') %>
+<div class="page-header">
+  <h1>Lá số đã tạo <span class="muted">(<%= total %>)</span></h1>
+  <form class="search" method="GET" action="/laso">
+    <input name="q" value="<%= q %>" placeholder="Tìm theo tên / IP / link" />
+    <button class="btn">Tìm</button>
+    <% if (q) { %><a href="/laso" class="btn btn-link">Xóa</a><% } %>
+  </form>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Họ tên</th>
+      <th>Giới tính</th>
+      <th>Ngày sinh</th>
+      <th>Giờ sinh</th>
+      <th>Năm xem</th>
+      <th>IP</th>
+      <th>Tạo lúc</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% items.forEach((it, idx) => { const input = it.input || {}; %>
+    <tr>
+      <td><%= (page - 1) * 20 + idx + 1 %></td>
+      <td><strong><%= input.hoten || '—' %></strong></td>
+      <td><%= input.gioitinh || '—' %></td>
+      <td><%= (input.ngaysinh || '?') + '/' + (input.thangsinh || '?') + '/' + (input.namsinh || '?') %><% if (input.amlich) { %> <span class="badge">ÂL</span><% } %></td>
+      <td><%= input.giosinh != null ? input.giosinh : '—' %></td>
+      <td><%= input.namxem || '—' %></td>
+      <td class="mono small"><%= it.ip || '—' %></td>
+      <td class="mono small"><%= it.createdAt ? new Date(it.createdAt).toLocaleString('vi-VN') : '—' %></td>
+      <td class="actions">
+        <a class="btn btn-sm" href="/laso/<%= it._id %>">Chi tiết</a>
+        <% if (it.link) { %>
+          <a class="btn btn-sm btn-primary" target="_blank" rel="noopener" href="<%= tuviBaseUrl %><%= it.link %>">Xem lá số ↗</a>
+        <% } %>
+      </td>
+    </tr>
+    <% }) %>
+    <% if (!items.length) { %>
+    <tr><td colspan="9" class="muted center">Chưa có lá số nào.</td></tr>
+    <% } %>
+  </tbody>
+</table>
+
+<% if (pages > 1) { %>
+<nav class="pagination">
+  <% for (let p = 1; p <= pages; p++) { %>
+    <a class="<%= p === page ? 'active' : '' %>" href="?page=<%= p %><%= q ? '&q=' + encodeURIComponent(q) : '' %>"><%= p %></a>
+  <% } %>
+</nav>
+<% } %>
+
+<%- include('../partials/footer') %>

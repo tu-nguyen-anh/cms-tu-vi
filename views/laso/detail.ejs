@@ -1,0 +1,31 @@
+<% const title='Chi tiết lá số'; const active='laso' %>
+<%- include('../partials/header') %>
+<a href="/laso" class="btn btn-link">← Quay lại danh sách</a>
+<h1>Lá số: <%= item.input && item.input.hoten ? item.input.hoten : item._id %></h1>
+
+<% if (item.link) { %>
+<p>
+  <a class="btn btn-primary btn-lg" target="_blank" rel="noopener" href="<%= tuviBaseUrl %><%= item.link %>">▶ Mở lá số trong trang Tử Vi</a>
+</p>
+<p class="muted small">Link: <code><%= tuviBaseUrl %><%= item.link %></code></p>
+<% } %>
+
+<div class="card">
+  <h3>Thông tin nhập</h3>
+  <table class="kv">
+    <% Object.entries(item.input || {}).forEach(([k, v]) => { %>
+    <tr><th><%= k %></th><td><%= v === null || v === undefined ? '—' : (typeof v === 'object' ? JSON.stringify(v) : String(v)) %></td></tr>
+    <% }) %>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Metadata</h3>
+  <table class="kv">
+    <tr><th>_id</th><td class="mono"><%= item._id %></td></tr>
+    <tr><th>IP</th><td class="mono"><%= item.ip || '—' %></td></tr>
+    <tr><th>Tạo lúc</th><td><%= item.createdAt ? new Date(item.createdAt).toLocaleString('vi-VN') : '—' %></td></tr>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

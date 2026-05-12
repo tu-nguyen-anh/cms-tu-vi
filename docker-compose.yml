@@ -1,0 +1,10 @@
+services:
+  admin:
+    build: .
+    image: admin-tu-vi:latest
+    container_name: admin-tu-vi
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "48273:48273"

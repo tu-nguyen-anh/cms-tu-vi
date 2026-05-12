@@ -1,0 +1,16 @@
+<% const title='Đăng nhập' %>
+<%- include('partials/header') %>
+<div class="login-card">
+  <h1>CMS Tử Vi</h1>
+  <p class="muted">Đăng nhập để vào hệ thống quản trị</p>
+  <% if (error) { %><div class="flash flash-error"><%= error %></div><% } %>
+  <form method="POST" action="/login">
+    <label>Tài khoản</label>
+    <input name="username" type="text" autocomplete="username" required autofocus>
+    <label>Mật khẩu</label>
+    <input name="password" type="password" autocomplete="current-password" required>
+    <button class="btn btn-primary" type="submit">Đăng nhập</button>
+  </form>
+  <p class="muted small">Mặc định: <code>admin</code> / <code>Tuvi@2025</code> — vui lòng đổi mật khẩu sau khi đăng nhập.</p>
+</div>
+<%- include('partials/footer') %>

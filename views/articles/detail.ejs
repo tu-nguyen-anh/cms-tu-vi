@@ -1,0 +1,37 @@
+<% const title=item.title; const active='articles' %>
+<%- include('../partials/header') %>
+<a href="/articles" class="btn btn-link">← Quay lại danh sách</a>
+<article class="article-detail<%= item.pinned ? ' article-detail-pinned' : '' %>">
+  <h1>
+    <% if (item.pinned) { %><span class="badge badge-pin" title="Đã ghim">📌 Đã ghim</span> <% } %>
+    <%= item.title %>
+  </h1>
+  <div class="meta muted">
+    <% if (item.school) { %><span>🏫 <%= item.school %></span> · <% } %>
+    <span>✍ <%= item.author %></span> ·
+    <span><%= new Date(item.createdAt).toLocaleString('vi-VN') %></span>
+    <% if (!item.published) { %> · <span class="badge badge-warn">Nháp</span><% } %>
+    <% if (item.pinned && item.pinnedAt) { %> · <span>📌 Ghim lúc <%= new Date(item.pinnedAt).toLocaleString('vi-VN') %></span><% } %>
+  </div>
+  <% if (item.tags && item.tags.length) { %>
+  <div class="tags">
+    <% item.tags.forEach(t => { %><span class="tag"><%= t %></span><% }) %>
+  </div>
+  <% } %>
+  <% if (item.summary) { %><p class="summary"><em><%= item.summary %></em></p><% } %>
+  <div class="content"><%= item.content %></div>
+</article>
+
+<div class="actions" style="margin-top:24px">
+  <a href="/articles/<%= item._id %>/edit" class="btn">✏ Sửa</a>
+  <form method="POST" action="/articles/<%= item._id %>/pin" style="display:inline">
+    <input type="hidden" name="redirect" value="/articles/<%= item._id %>">
+    <button type="submit" class="btn <%= item.pinned ? '' : 'btn-primary' %>">
+      <%= item.pinned ? '📍 Bỏ ghim' : '📌 Ghim bài này' %>
+    </button>
+  </form>
+  <form method="POST" action="/articles/<%= item._id %>?_method=DELETE" style="display:inline" onsubmit="return confirm('Xóa bài này?');">
+    <button type="submit" class="btn btn-danger">🗑 Xóa</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,56 @@
+<% const title='Học Tử Vi'; const active='articles' %>
+<%- include('../partials/header') %>
+<div class="page-header">
+  <h1>Học Tử Vi — Tài liệu <span class="muted">(<%= total %>)</span></h1>
+  <div class="page-actions">
+    <form class="search" method="GET" action="/articles">
+      <input name="q" value="<%= q %>" placeholder="Tìm theo tiêu đề / tag / trường phái" />
+      <button class="btn">Tìm</button>
+      <% if (q) { %><a href="/articles" class="btn btn-link">Xóa</a><% } %>
+    </form>
+    <a href="/articles/new" class="btn btn-primary">+ Đăng bài mới</a>
+  </div>
+</div>
+
+<div class="article-grid">
+<% items.forEach((it) => { %>
+  <article class="article-card<%= it.pinned ? ' article-card-pinned' : '' %>">
+    <h3>
+      <% if (it.pinned) { %><span class="badge badge-pin" title="Đã ghim">📌 Đã ghim</span> <% } %>
+      <a href="/articles/<%= it._id %>"><%= it.title %></a>
+    </h3>
+    <div class="meta small muted">
+      <% if (it.school) { %><span>🏫 <%= it.school %></span> · <% } %>
+      <span>✍ <%= it.author %></span> ·
+      <span><%= new Date(it.createdAt).toLocaleDateString('vi-VN') %></span>
+      <% if (!it.published) { %> · <span class="badge badge-warn">Nháp</span><% } %>
+      ·
+      <form method="POST" action="/articles/<%= it._id %>/pin" style="display:inline">
+        <input type="hidden" name="redirect" value="/articles<%= q ? '?q=' + encodeURIComponent(q) : '' %>">
+        <button type="submit" class="btn btn-link btn-pin" title="<%= it.pinned ? 'Bỏ ghim' : 'Ghim bài này' %>">
+          <%= it.pinned ? '📍 Bỏ ghim' : '📌 Ghim' %>
+        </button>
+      </form>
+    </div>
+    <% if (it.summary) { %><p class="muted"><%= it.summary %></p><% } %>
+    <% if (it.tags && it.tags.length) { %>
+    <div class="tags">
+      <% it.tags.forEach(t => { %><span class="tag"><%= t %></span><% }) %>
+    </div>
+    <% } %>
+  </article>
+<% }) %>
+<% if (!items.length) { %>
+<p class="muted">Chưa có bài viết nào. <a href="/articles/new">Đăng bài đầu tiên →</a></p>
+<% } %>
+</div>
+
+<% if (pages > 1) { %>
+<nav class="pagination">
+  <% for (let p = 1; p <= pages; p++) { %>
+    <a class="<%= p === page ? 'active' : '' %>" href="?page=<%= p %><%= q ? '&q=' + encodeURIComponent(q) : '' %>"><%= p %></a>
+  <% } %>
+</nav>
+<% } %>
+
+<%- include('../partials/footer') %>

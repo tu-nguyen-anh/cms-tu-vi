@@ -1,0 +1,37 @@
+<% const title = item && item._id ? 'Sửa bài' : 'Đăng bài mới'; const active='articles' %>
+<%- include('../partials/header') %>
+<h1><%= title %></h1>
+<% if (error) { %><div class="flash flash-error"><%= error %></div><% } %>
+
+<form method="POST" action="<%= item && item._id ? '/articles/' + item._id + '?_method=PUT' : '/articles' %>" class="form-card">
+  <label>Tiêu đề *</label>
+  <input name="title" type="text" required value="<%= item && item.title ? item.title : '' %>" maxlength="300">
+
+  <div class="row">
+    <div>
+      <label>Trường phái</label>
+      <input name="school" type="text" value="<%= item && item.school ? item.school : '' %>" placeholder="VD: Tử Vi Bắc phái, Nam phái, Thiên Lương...">
+    </div>
+    <div>
+      <label>Tags (phân cách bởi dấu phẩy)</label>
+      <input name="tags" type="text" value="<%= item && item.tags ? (Array.isArray(item.tags) ? item.tags.join(', ') : item.tags) : '' %>" placeholder="VD: an sao, cung mệnh, hoá kỵ">
+    </div>
+  </div>
+
+  <label>Tóm tắt (tùy chọn, ≤ 1000 ký tự)</label>
+  <textarea name="summary" rows="3" maxlength="1000"><%= item && item.summary ? item.summary : '' %></textarea>
+
+  <label>Nội dung * <span class="muted small">(hỗ trợ văn bản dài, có thể paste nội dung lớn)</span></label>
+  <textarea name="content" rows="24" required style="font-family: 'Cambria','Times New Roman',serif; font-size:15px"><%= item && item.content ? item.content : '' %></textarea>
+
+  <label class="checkbox">
+    <input type="checkbox" name="published" <%= !item || item.published ? 'checked' : '' %>>
+    Xuất bản (bỏ chọn để lưu nháp)
+  </label>
+
+  <div class="actions">
+    <button class="btn btn-primary" type="submit"><%= item && item._id ? 'Cập nhật' : 'Đăng bài' %></button>
+    <a href="<%= item && item._id ? '/articles/' + item._id : '/articles' %>" class="btn btn-link">Hủy</a>
+  </div>
+</form>
+<%- include('../partials/footer') %>

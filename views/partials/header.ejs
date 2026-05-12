@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>CMS Tử Vi</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<% if (currentUser) { %>
+<header class="topbar">
+  <div class="brand"><a href="/">CMS Tử Vi</a></div>
+  <nav>
+    <a href="/laso" class="<%= (typeof active !== 'undefined' && active === 'laso') ? 'active' : '' %>">Lá số đã tạo</a>
+    <a href="/articles" class="<%= (typeof active !== 'undefined' && active === 'articles') ? 'active' : '' %>">Học Tử Vi</a>
+  </nav>
+  <div class="userbox">
+    <span class="user">👤 <%= currentUser.username %></span>
+    <a class="link" href="/change-password">Đổi mật khẩu</a>
+    <form action="/logout" method="POST" style="display:inline">
+      <button class="btn btn-link" type="submit">Đăng xuất</button>
+    </form>
+  </div>
+</header>
+<% } %>
+<main class="container">
+<% if (flash) { %>
+<div class="flash flash-<%= flash.type %>"><%= flash.text %></div>
+<% } %>
