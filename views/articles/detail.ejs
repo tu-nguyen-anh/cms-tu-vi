@@ -30,8 +30,11 @@
       <%= item.pinned ? '📍 Bỏ ghim' : '📌 Ghim bài này' %>
     </button>
   </form>
-  <form method="POST" action="/articles/<%= item._id %>?_method=DELETE" style="display:inline" onsubmit="return confirm('Xóa bài này?');">
-    <button type="submit" class="btn btn-danger">🗑 Xóa</button>
+  <form method="POST" action="/articles/<%= item._id %>?_method=DELETE" style="display:inline"
+        data-confirm="Bạn có chắc muốn xoá bài viết này? Hành động không thể hoàn tác."
+        data-confirm-target="<%= item.title %>"
+        data-confirm-button="Xoá bài">
+    <button type="submit" class="btn btn-danger">🗑 Xoá</button>
   </form>
 </div>
 <%- include('../partials/footer') %>

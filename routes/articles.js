@@ -146,7 +146,8 @@ router.post('/:id/pin', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   await Article.findByIdAndDelete(req.params.id);
   req.session.flash = { type: 'success', text: 'Đã xóa bài.' };
-  res.redirect('/articles');
+  const back = typeof req.body.redirect === 'string' && req.body.redirect.startsWith('/articles') ? req.body.redirect : '/articles';
+  res.redirect(back);
 });
 
 module.exports = router;

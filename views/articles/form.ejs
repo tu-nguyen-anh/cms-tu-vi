@@ -4,34 +4,43 @@
 <% if (error) { %><div class="flash flash-error"><%= error %></div><% } %>
 
 <form method="POST" action="<%= item && item._id ? '/articles/' + item._id + '?_method=PUT' : '/articles' %>" class="form-card">
-  <label>Tiêu đề *</label>
-  <input name="title" type="text" required value="<%= item && item.title ? item.title : '' %>" maxlength="300">
+  <div class="field">
+    <label for="f-title">Tiêu đề <span class="req">*</span><span class="counter"></span></label>
+    <input id="f-title" name="title" type="text" required value="<%= item && item.title ? item.title : '' %>" maxlength="300" data-counter autofocus>
+  </div>
 
   <div class="row">
-    <div>
-      <label>Trường phái</label>
-      <input name="school" type="text" value="<%= item && item.school ? item.school : '' %>" placeholder="VD: Tử Vi Bắc phái, Nam phái, Thiên Lương...">
+    <div class="field">
+      <label for="f-school">Trường phái</label>
+      <input id="f-school" name="school" type="text" value="<%= item && item.school ? item.school : '' %>" placeholder="VD: Tử Vi Bắc phái, Nam phái, Thiên Lương...">
     </div>
-    <div>
-      <label>Tags (phân cách bởi dấu phẩy)</label>
-      <input name="tags" type="text" value="<%= item && item.tags ? (Array.isArray(item.tags) ? item.tags.join(', ') : item.tags) : '' %>" placeholder="VD: an sao, cung mệnh, hoá kỵ">
+    <div class="field">
+      <label for="f-tags">Tags</label>
+      <input id="f-tags" name="tags" type="text" value="<%= item && item.tags ? (Array.isArray(item.tags) ? item.tags.join(', ') : item.tags) : '' %>" placeholder="an sao, cung mệnh, hoá kỵ">
+      <p class="hint">Phân cách bởi dấu phẩy.</p>
     </div>
   </div>
 
-  <label>Tóm tắt (tùy chọn, ≤ 1000 ký tự)</label>
-  <textarea name="summary" rows="3" maxlength="1000"><%= item && item.summary ? item.summary : '' %></textarea>
+  <div class="field">
+    <label for="f-summary">Tóm tắt <span class="muted">(tùy chọn)</span><span class="counter"></span></label>
+    <textarea id="f-summary" name="summary" rows="3" maxlength="1000" data-counter placeholder="1-2 câu mô tả ngắn, hiển thị ở danh sách bài viết."><%= item && item.summary ? item.summary : '' %></textarea>
+  </div>
 
-  <label>Nội dung * <span class="muted small">(hỗ trợ văn bản dài, có thể paste nội dung lớn)</span></label>
-  <textarea name="content" rows="24" required style="font-family: 'Cambria','Times New Roman',serif; font-size:15px"><%= item && item.content ? item.content : '' %></textarea>
+  <div class="field">
+    <label for="f-content">Nội dung <span class="req">*</span></label>
+    <textarea id="f-content" name="content" rows="22" required style="font-family: 'Cambria','Times New Roman',serif; font-size:15px" placeholder="Dán hoặc gõ nội dung bài viết..."><%= item && item.content ? item.content : '' %></textarea>
+    <p class="hint">Hỗ trợ văn bản dài. Xuống dòng giữ nguyên khi hiển thị.</p>
+  </div>
 
   <label class="checkbox">
     <input type="checkbox" name="published" <%= !item || item.published ? 'checked' : '' %>>
-    Xuất bản (bỏ chọn để lưu nháp)
+    <span>Xuất bản <span class="muted small">(bỏ chọn để lưu nháp)</span></span>
   </label>
 
   <div class="actions">
-    <button class="btn btn-primary" type="submit"><%= item && item._id ? 'Cập nhật' : 'Đăng bài' %></button>
-    <a href="<%= item && item._id ? '/articles/' + item._id : '/articles' %>" class="btn btn-link">Hủy</a>
+    <a href="<%= item && item._id ? '/articles/' + item._id : '/articles' %>" class="btn btn-link">Huỷ</a>
+    <span class="spacer"></span>
+    <button class="btn btn-primary" type="submit"><%= item && item._id ? '💾 Cập nhật' : '✓ Đăng bài' %></button>
   </div>
 </form>
 <%- include('../partials/footer') %>

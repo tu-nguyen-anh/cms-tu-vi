@@ -1,4 +1,73 @@
-</main>
-<footer class="footer">CMS Tử Vi · <%= new Date().getFullYear() %></footer>
+  </main>
+  <footer class="footer">CMS Tử Vi · <%= new Date().getFullYear() %></footer>
+
+  <div class="modal-backdrop" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal">
+      <h3 id="confirmTitle">Xác nhận xoá</h3>
+      <p id="confirmMessage">Hành động này không thể hoàn tác.</p>
+      <span class="modal-target" id="confirmTarget" hidden></span>
+      <div class="modal-actions">
+        <button type="button" class="btn" data-confirm-cancel>Huỷ</button>
+        <button type="button" class="btn btn-danger" id="confirmOk">Xoá</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var modal = document.getElementById('confirmModal');
+    if (!modal) return;
+    var msg = document.getElementById('confirmMessage');
+    var target = document.getElementById('confirmTarget');
+    var ok = document.getElementById('confirmOk');
+    var pendingForm = null;
+
+    function open(form) {
+      pendingForm = form;
+      var m = form.getAttribute('data-confirm') || 'Bạn có chắc muốn xoá mục này?';
+      var t = form.getAttribute('data-confirm-target') || '';
+      var btn = form.getAttribute('data-confirm-button') || 'Xoá';
+      msg.textContent = m;
+      ok.textContent = btn;
+      if (t) { target.textContent = t; target.hidden = false; } else { target.hidden = true; }
+      modal.classList.add('show');
+      ok.focus();
+    }
+    function close() { modal.classList.remove('show'); pendingForm = null; }
+
+    document.addEventListener('submit', function (e) {
+      var f = e.target;
+      if (f && f.matches && f.matches('form[data-confirm]')) {
+        e.preventDefault();
+        open(f);
+      }
+    });
+    ok.addEventListener('click', function () {
+      if (pendingForm) { var f = pendingForm; close(); f.removeAttribute('data-confirm'); f.submit(); }
+    });
+    modal.querySelector('[data-confirm-cancel]').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('show')) close(); });
+  })();
+
+  (function () {
+    document.querySelectorAll('[data-counter]').forEach(function (input) {
+      var max = parseInt(input.getAttribute('maxlength') || input.getAttribute('data-max') || '0', 10);
+      var label = document.querySelector('label[for="' + input.id + '"] .counter');
+      if (!label) return;
+      function update() {
+        var n = input.value.length;
+        label.textContent = max ? n + ' / ' + max : String(n);
+        label.classList.remove('warn', 'over');
+        if (max) {
+          if (n > max) label.classList.add('over');
+          else if (n > max * 0.9) label.classList.add('warn');
+        }
+      }
+      input.addEventListener('input', update);
+      update();
+    });
+  })();
+  </script>
 </body>
 </html>

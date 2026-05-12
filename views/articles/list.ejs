@@ -15,29 +15,41 @@
 <div class="article-grid">
 <% items.forEach((it) => { %>
   <article class="article-card<%= it.pinned ? ' article-card-pinned' : '' %>">
-    <h3>
-      <% if (it.pinned) { %><span class="badge badge-pin" title="Đã ghim">📌 Đã ghim</span> <% } %>
-      <a href="/articles/<%= it._id %>"><%= it.title %></a>
-    </h3>
-    <div class="meta small muted">
-      <% if (it.school) { %><span>🏫 <%= it.school %></span> · <% } %>
-      <span>✍ <%= it.author %></span> ·
-      <span><%= new Date(it.createdAt).toLocaleDateString('vi-VN') %></span>
-      <% if (!it.published) { %> · <span class="badge badge-warn">Nháp</span><% } %>
-      ·
-      <form method="POST" action="/articles/<%= it._id %>/pin" style="display:inline">
+    <div class="article-body">
+      <h3>
+        <% if (it.pinned) { %><span class="badge badge-pin" title="Đã ghim">📌 Đã ghim</span> <% } %>
+        <a href="/articles/<%= it._id %>"><%= it.title %></a>
+      </h3>
+      <div class="meta small muted">
+        <% if (it.school) { %><span>🏫 <%= it.school %></span> · <% } %>
+        <span>✍ <%= it.author %></span> ·
+        <span><%= new Date(it.createdAt).toLocaleDateString('vi-VN') %></span>
+        <% if (!it.published) { %> · <span class="badge badge-warn">Nháp</span><% } %>
+        ·
+        <form method="POST" action="/articles/<%= it._id %>/pin" style="display:inline">
+          <input type="hidden" name="redirect" value="/articles<%= q ? '?q=' + encodeURIComponent(q) : '' %>">
+          <button type="submit" class="btn btn-link btn-pin" title="<%= it.pinned ? 'Bỏ ghim' : 'Ghim bài này' %>">
+            <%= it.pinned ? '📍 Bỏ ghim' : '📌 Ghim' %>
+          </button>
+        </form>
+      </div>
+      <% if (it.summary) { %><p class="muted"><%= it.summary %></p><% } %>
+      <% if (it.tags && it.tags.length) { %>
+      <div class="tags">
+        <% it.tags.forEach(t => { %><span class="tag"><%= t %></span><% }) %>
+      </div>
+      <% } %>
+    </div>
+    <div class="article-actions">
+      <a class="btn btn-sm" href="/articles/<%= it._id %>/edit">✏ Sửa</a>
+      <form method="POST" action="/articles/<%= it._id %>?_method=DELETE"
+            data-confirm="Bạn có chắc muốn xoá bài này? Hành động không thể hoàn tác."
+            data-confirm-target="<%= it.title %>"
+            data-confirm-button="Xoá bài">
         <input type="hidden" name="redirect" value="/articles<%= q ? '?q=' + encodeURIComponent(q) : '' %>">
-        <button type="submit" class="btn btn-link btn-pin" title="<%= it.pinned ? 'Bỏ ghim' : 'Ghim bài này' %>">
-          <%= it.pinned ? '📍 Bỏ ghim' : '📌 Ghim' %>
-        </button>
+        <button type="submit" class="btn btn-sm btn-ghost-danger">🗑 Xoá</button>
       </form>
     </div>
-    <% if (it.summary) { %><p class="muted"><%= it.summary %></p><% } %>
-    <% if (it.tags && it.tags.length) { %>
-    <div class="tags">
-      <% it.tags.forEach(t => { %><span class="tag"><%= t %></span><% }) %>
-    </div>
-    <% } %>
   </article>
 <% }) %>
 <% if (!items.length) { %>
