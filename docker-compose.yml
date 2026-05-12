@@ -7,4 +7,15 @@ services:
     env_file:
       - .env
     ports:
-      - "48273:48273"
+      - "127.0.0.1:48273:48273"
+    cpus: 0.50
+    mem_limit: 256m
+    mem_reservation: 64m
+    pids_limit: 128
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.89.43.0/24
